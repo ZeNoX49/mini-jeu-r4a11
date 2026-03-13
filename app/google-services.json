@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1018298623195",
+    "firebase_url": "https://mini-jeu-r4a11-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "mini-jeu-r4a11",
+    "storage_bucket": "mini-jeu-r4a11.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018298623195:android:243c9b064c2e96e57b58fe",
+        "android_client_info": {
+          "package_name": "fr.app.mini_jeu_r4a11"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADk00AV1oz_iuie4NVVL5dSeoIZUeHNPo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
