@@ -1,17 +1,13 @@
-package fr.app.mini_jeu_r4a11
+package fr.app.mini_jeu_r4a11.__temp__
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
-import android.util.AttributeSet
 import android.view.View
 import kotlin.math.cos
 import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.sin
 import androidx.core.graphics.toColorInt
-import fr.app.mini_jeu_r4a11.ModelManager.Vec3
 
 class ModelManager constructor(context: Context) : View(context) {
     // private var lateinit width: Int;

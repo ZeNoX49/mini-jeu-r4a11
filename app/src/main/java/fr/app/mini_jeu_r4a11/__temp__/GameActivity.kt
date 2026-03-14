@@ -1,18 +1,13 @@
-package fr.app.mini_jeu_r4a11
+package fr.app.mini_jeu_r4a11.__temp__
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.content.edit
-import com.google.firebase.database.FirebaseDatabase
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
+import fr.app.mini_jeu_r4a11.R
 import fr.app.mini_jeu_r4a11.data.Player
 import kotlin.random.Random
 

@@ -13,7 +13,17 @@
         android:theme="@style/Theme.Mini_jeu_r4a11">
 
         <activity
-            android:name=".LauncherPseudo"
+            android:name=".launcher.LauncherPseudo"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+
+        <activity
+            android:name=".launcher.LauncherCreateName"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+
+        <activity
+            android:name=".LauncherPlay"
             android:screenOrientation="landscape"
             android:exported="false" />
 
