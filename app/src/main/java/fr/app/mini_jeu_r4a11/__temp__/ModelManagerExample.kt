@@ -8,8 +8,11 @@ import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 import androidx.core.graphics.toColorInt
+import fr.app.mini_jeu_r4a11.utils.Vec2
+import fr.app.mini_jeu_r4a11.utils.Vec3
 
-class ModelManager constructor(context: Context) : View(context) {
+class ModelManagerExample constructor(context: Context) : View(context) {
+    /*
     // private var lateinit width: Int;
     // private var lateinit height: Int;
 
@@ -91,9 +94,6 @@ class ModelManager constructor(context: Context) : View(context) {
 
     // ----------------- Fonctions math / transformations -----------------
 
-    private data class Vec3(val x: Float, val y: Float, val z: Float)
-    private data class Vec2(val x: Float, val y: Float)
-
     /**
      * permet de déplacer
      */
@@ -173,4 +173,5 @@ class ModelManager constructor(context: Context) : View(context) {
         //     canvas.drawRect(p.x - s / 2, p.y - s / 2, p.x + s / 2, p.y + s / 2, pointPaint)
         // }
     }
+    */
 }

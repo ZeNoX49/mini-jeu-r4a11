@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,6 +19,8 @@ class LauncherPlay : AppCompatActivity() {
     private lateinit var svllJoined: LinearLayout
     private lateinit var btnReturn: Button
 
+    private val db = FirebaseDatabase.getInstance("https://mini-jeu-r4a11-default-rtdb.europe-west1.firebasedatabase.app").reference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.launcher_play)
@@ -32,7 +33,7 @@ class LauncherPlay : AppCompatActivity() {
         }
 
         svllCreated = findViewById(R.id.svllCreated)
-        svllJoined = findViewById(R.id.svllJoined)
+        svllJoined = findViewById(R.id.svllJoin)
         btnReturn = findViewById(R.id.btnReturn)
 
         btnReturn.setOnClickListener {
@@ -47,44 +48,37 @@ class LauncherPlay : AppCompatActivity() {
             return // sinon faut mettre "player?" après
         }
 
-        val db = FirebaseDatabase.getInstance("https://mini-jeu-r4a11-default-rtdb.europe-west1.firebasedatabase.app").reference
+        // Parties créées
+        player.games["created"]?.forEach { id -> loadGame(id, svllCreated, showCreator = false) }
 
-        // parties créées
-        player.games["created"]?.forEach { id ->
-            db.child("games").child(id).get()
-                .addOnSuccessListener { snapshot ->
-                    val game = snapshot.getValue(Game::class.java) ?: return@addOnSuccessListener   // remplace continue
+        // Parties rejointes
+        player.games["joined"]?.forEach { id -> loadGame(id, svllJoined, showCreator = true) }
+    }
 
-                    val view = layoutInflater.inflate(R.layout.game, svllCreated, false)
-                    view.findViewById<TextView>(R.id.tvName).text = game.name
-                    view.findViewById<TextView>(R.id.tvCreator).visibility = View.GONE
-                    svllCreated.addView(view)
+    private fun loadGame(id: String, container: LinearLayout, showCreator: Boolean) {
+        db.child("games").child(id).get()
+            .addOnSuccessListener { snapshot ->
+                val game = snapshot.getValue(Game::class.java) ?: return@addOnSuccessListener
 
-                    view.setOnClickListener {
-                        val data = Intent().apply { putExtra("game", game) }
-                        setResult(Activity.RESULT_OK, data)
-                        finish()
+                val view = layoutInflater.inflate(R.layout.game, container, false)
+                view.findViewById<TextView>(R.id.tvName).text = game.name
+                view.findViewById<TextView>(R.id.tvCreator).apply {
+                    if (showCreator) {
+                        db.child("players").child(game.creator).get()
+                            .addOnSuccessListener { playerSnap ->
+                                val pseudo = playerSnap.child("pseudo").getValue(String::class.java) ?: game.creator
+                                text = pseudo
+                            }
+                    } else {
+                        visibility = View.GONE
                     }
                 }
-        }
+                container.addView(view)
 
-        // parties rejoint
-        player.games["joined"]?.forEach { id ->
-            db.child("games").child(id).get()
-                .addOnSuccessListener { snapshot ->
-                    val game = snapshot.getValue(Game::class.java) ?: return@addOnSuccessListener   // remplace continue
-
-                    val view = layoutInflater.inflate(R.layout.game, svllCreated, false)
-                    view.findViewById<TextView>(R.id.tvName).text = game.name
-                    view.findViewById<TextView>(R.id.tvCreator).text = game.creator
-                    svllCreated.addView(view)
-
-                    view.setOnClickListener {
-                        val data = Intent().apply { putExtra("game", game) }
-                        setResult(Activity.RESULT_OK, data)
-                        finish()
-                    }
+                view.setOnClickListener {
+                    setResult(Activity.RESULT_OK, Intent().apply { putExtra("game", game) })
+                    finish()
                 }
-        }
+            }
     }
 }

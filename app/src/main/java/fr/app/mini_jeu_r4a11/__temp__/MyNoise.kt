@@ -86,25 +86,25 @@ class MyNoise {
 
         for (y in 0 until height) {
             for (x in 0 until width) {
-                var maxDist = 0f
-                var maxValue = -1
+                var minDist = Float.POSITIVE_INFINITY
+                var value = -1
 
                 for (b in bases) {
                     val dx = (x - b.x).toFloat()
                     val dy = (y - b.y).toFloat()
                     val dsq = dx * dx + dy * dy
 
-                    if (dsq > maxDist) {
-                        maxDist = dsq
-                        maxValue = b.value
-                    } else if (dsq == maxDist) {
+                    if (dsq < minDist) {
+                        minDist = dsq
+                        value = b.value
+                    } else if (dsq == minDist) {
                         if (rng.nextBoolean()) {
-                            maxValue = b.value
+                            value = b.value
                         }
                     }
                 }
 
-                posValues[y][x] = maxValue
+                posValues[y][x] = value
             }
         }
 
@@ -112,6 +112,8 @@ class MyNoise {
     }
 
     /**
+     * actuellement désactivé
+     *
      * Permet de générer un multi-value gradient
      * @param seed si > 0, rend la génération reproductible
      * @param weights nombre de bases à placer pour les valeurs
@@ -119,6 +121,7 @@ class MyNoise {
      * @return une grille height x width avec les valeurs pour le gradient
      */
     fun generateMultiGradient(width: Int, height: Int, seed: Int, weights: MutableList<Int>, percent: Int): List<List<FloatArray>> {
+        /*
         val pClamped = percent.coerceIn(0, 100)
         val power = 1.0f + (pClamped / 100f) * 4.0f  // 1..5
         val nbValues = weights.size
@@ -186,5 +189,7 @@ class MyNoise {
 
         // convertir en List<List<FloatArray>>
         return posValuesArr.map { row -> row.toList() }
+        */
+        return mutableListOf()
     }
 }

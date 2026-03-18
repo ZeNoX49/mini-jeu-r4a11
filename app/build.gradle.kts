@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation("com.firebaseui:firebase-ui-database:9.1.1")
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.media3.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
