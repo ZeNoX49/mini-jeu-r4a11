@@ -27,7 +27,7 @@ class LauncherPseudo : AppCompatActivity() {
         setContentView(R.layout.launcher_pseudo)
 
         // pour prendre en compte la partie haute et basse du tel
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.iv)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets

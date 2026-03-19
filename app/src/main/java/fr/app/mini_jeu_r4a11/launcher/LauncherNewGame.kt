@@ -69,7 +69,7 @@ class LauncherNewGame: AppCompatActivity() {
         }
 
         val newGameRef = db.child("games").push()
-        val id = newGameRef.key!! + player.id
+        val id = newGameRef.key!!
         val game = Game(player.id, id, name).apply {
             playerInfo[player.id] = ""
         }
