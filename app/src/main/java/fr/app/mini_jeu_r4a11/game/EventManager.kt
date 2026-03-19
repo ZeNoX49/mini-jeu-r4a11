@@ -2,21 +2,21 @@ package fr.app.mini_jeu_r4a11.game
 
 import android.os.SystemClock
 import fr.app.mini_jeu_r4a11.utils.Camera
-import fr.app.mini_jeu_r4a11.utils.Vec3
+import fr.app.mini_jeu_r4a11.utils.Vec2
 import kotlin.math.sqrt
 
-class EventManager constructor(cam: Camera) {
+class EventManager(cam: Camera) {
     private val camera = cam
 
     // animation (tap -> center)
     private var isAnimating = false
     private var animStartTime: Long = 0L
     private var animDuration: Long = 0L
-    private var animFrom = Vec3(0f, 0f, 1.0f)
-    private var animTo = Vec3(0f, 0f, 1.0f)
+    private var animFrom = Vec2(0f, 0f)
+    private var animTo = Vec2(0f, 0f)
 
     // animation helpers
-    fun startAnimationTo(target: Vec3) {
+    fun startAnimationTo(target: Vec2) {
         animFrom = camera.target
         animTo = target
         animStartTime = SystemClock.uptimeMillis()
@@ -43,20 +43,19 @@ class EventManager constructor(cam: Camera) {
             else -> tRaw
         }
         val eased = t * t * (3f - 2f * t)
-        camera.target = lerpVec3(animFrom, animTo, eased)
+        camera.target = lerpVec2(animFrom, animTo, eased)
         if (t >= 1f) {
             isAnimating = false
             camera.target = animTo
         }
     }
 
-    private fun lerpVec3(a: Vec3, b: Vec3, t: Float): Vec3 =
-        Vec3(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t)
+    private fun lerpVec2(a: Vec2, b: Vec2, t: Float): Vec2 =
+        Vec2(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t)
 
-    private fun distanceBetween(a: Vec3, b: Vec3): Float {
+    private fun distanceBetween(a: Vec2, b: Vec2): Float {
         val dx = a.x - b.x
         val dy = a.y - b.y
-        val dz = a.z - b.z
-        return sqrt(dx*dx + dy*dy + dz*dz)
+        return sqrt(dx*dx + dy*dy )
     }
 }

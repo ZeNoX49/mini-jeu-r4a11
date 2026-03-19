@@ -11,7 +11,6 @@ import fr.app.mini_jeu_r4a11.data.Game
 import fr.app.mini_jeu_r4a11.data.Player
 import fr.app.mini_jeu_r4a11.utils.SquareColor
 import fr.app.mini_jeu_r4a11.utils.Vec2
-import fr.app.mini_jeu_r4a11.utils.Vec3
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Region
@@ -101,7 +100,7 @@ class GameActivity : AppCompatActivity() {
         private var clickY = -1f
 
         // geometry
-        private val vertices: MutableList<Vec3> = mutableListOf()
+        private val vertices: MutableList<Vec2> = mutableListOf()
         private val faces: MutableList<IntArray> = mutableListOf()
 
         init {
@@ -124,10 +123,10 @@ class GameActivity : AppCompatActivity() {
             var idx = 0
             for (y in -16..16) {
                 for (x in -16..16) {
-                    vertices.add(Vec3(x - 0.5f, y - 0.5f, 5f))
-                    vertices.add(Vec3(x - 0.5f, y + 0.5f, 5f))
-                    vertices.add(Vec3(x + 0.5f, y + 0.5f, 5f))
-                    vertices.add(Vec3(x + 0.5f, y - 0.5f, 5f))
+                    vertices.add(Vec2(x - 0.5f, y - 0.5f))
+                    vertices.add(Vec2(x - 0.5f, y + 0.5f))
+                    vertices.add(Vec2(x + 0.5f, y + 0.5f))
+                    vertices.add(Vec2(x + 0.5f, y - 0.5f))
                     faces.add(intArrayOf(idx++, idx++, idx++, idx++))
                 }
             }
@@ -147,12 +146,8 @@ class GameActivity : AppCompatActivity() {
             clip.set(0, 0, w, h)
         }
 
-        private fun display(v: Vec3): Vec2 {
-            return (v - camera.target)
-                .rotationY(camera.yaw)
-                .rotationX(camera.pitch)
-                .projection(camera.focalLength)
-                .toScreen(WIDTH, HEIGHT)
+        private fun display(v: Vec2): Vec2 {
+            return (v - camera.target).toScreen(WIDTH, HEIGHT, camera.zoom)
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -181,12 +176,10 @@ class GameActivity : AppCompatActivity() {
 
                 // picking (tap)
                 if (clickX >= 0f && clickY >= 0f && region.contains(clickX.toInt(), clickY.toInt())) {
-                    val centerWorld = Vec3(
+                    val target = Vec2(
                         (vertices[f[0]].x + vertices[f[2]].x) / 2f,
-                        (vertices[f[0]].y + vertices[f[2]].y) / 2f,
-                        1.0f
+                        (vertices[f[0]].y + vertices[f[2]].y) / 2f
                     )
-                    val target = Vec3(-centerWorld.x, -centerWorld.y, 1.0f)
                     eventManager.startAnimationTo(target)
                     clickX = -1f
                     clickY = -1f
@@ -199,10 +192,10 @@ class GameActivity : AppCompatActivity() {
                 // draw face + edges
                 canvas.drawPath(path, facePaints[colorIndex])
                 for (i in f.indices) {
-                    val a = vertices[f[i]] + camera.target
-                    val b = vertices[f[(i + 1) % f.size]] + camera.target
-                    val pa = a.projection(camera.focalLength).toScreen(WIDTH, HEIGHT)
-                    val pb = b.projection(camera.focalLength).toScreen(WIDTH, HEIGHT)
+                    val a = vertices[f[i]] - camera.target
+                    val b = vertices[f[(i + 1) % f.size]] - camera.target
+                    val pa = a.toScreen(WIDTH, HEIGHT, camera.zoom)
+                    val pb = b.toScreen(WIDTH, HEIGHT, camera.zoom)
                     canvas.drawLine(pa.x, pa.y, pb.x, pb.y, linePaints[colorIndex])
                 }
 
@@ -211,11 +204,10 @@ class GameActivity : AppCompatActivity() {
 
             // marqueur central
             val xy = 0.1f
-            val z = 5.0f
-            val v0 = Vec3(-xy,  xy, z).projection(camera.focalLength).toScreen(WIDTH, HEIGHT)
-            val v1 = Vec3( xy,  xy, z).projection(camera.focalLength).toScreen(WIDTH, HEIGHT)
-            val v2 = Vec3( xy, -xy, z).projection(camera.focalLength).toScreen(WIDTH, HEIGHT)
-            val v3 = Vec3(-xy, -xy, z).projection(camera.focalLength).toScreen(WIDTH, HEIGHT)
+            val v0 = Vec2(-xy,  xy).toScreen(WIDTH, HEIGHT, camera.zoom)
+            val v1 = Vec2( xy,  xy).toScreen(WIDTH, HEIGHT, camera.zoom)
+            val v2 = Vec2( xy, -xy).toScreen(WIDTH, HEIGHT, camera.zoom)
+            val v3 = Vec2(-xy, -xy).toScreen(WIDTH, HEIGHT, camera.zoom)
             path.reset()
             path.moveTo(v0.x, v0.y)
             path.lineTo(v1.x, v1.y)
